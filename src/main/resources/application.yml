@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: pm-map
+
+server:
+  port: 8085
+  
