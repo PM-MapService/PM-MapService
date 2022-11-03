@@ -4,5 +4,6 @@ server:
 spring:
   application:
     name: pm-map
-
-
+  mybatis:
+    type-aliases-package: com.capstone.team5.entity #entity ??
+    mapper-locations: mybatis/Mapper.xml #??.xml ??
