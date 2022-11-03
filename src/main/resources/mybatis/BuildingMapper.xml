@@ -2,6 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.capstone.team5.repository.BuildingRepository">
+    <insert id="insert"
+            parameterType="BuildingEntity"
+            useGeneratedKeys="true"
+            keyProperty="buildingId"
+            keyColumn="building_id">
+        INSERT INTO building (name, latitude, longitude)
+        VALUES (#{name}, #{latitude}, #{longitude});
+    </insert>
+
+    <select id="select"
+            resultType="BuildingEntity">
+        SELECT building_id, name, latitude, longitude
+          FROM building
+         WHERE building_id = #{buildingId}
+    </select>
+
+    <update id="update"
+            parameterType="BuildingEntity"
+            useGeneratedKeys="true"
+            keyProperty="buildingId"
+            keyColumn="building_id">
+        UPDATE building
+           SET name = #{name},
+               latitude = #{latitude},
+               longitude = #{longitude}
+         WHERE building_id = #{buildingId};
+    </update>
+
+    <delete id="delete"
+            parameterType="int">
+        DELETE
+          FROM building
+         WHERE building_id = #{buildingId}
+    </delete>
 
     <select id="selectByName"
             resultType="BuildingEntity">
@@ -9,3 +43,4 @@
           FROM building
          WHERE name = #{name}
     </select>
+</mapper>

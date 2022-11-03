@@ -5,5 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface BuildingRepository {
+    int insert(BuildingEntity buildingEntity);
+    BuildingEntity select(int buildingId);
+    int update(BuildingEntity buildingEntity);
+    int delete(int buildingId);
     BuildingEntity selectByName(String name);
 }
