@@ -1,12 +1,17 @@
 package com.capstone.team5.pmmap.service;
 
+import com.capstone.team5.pmmap.dto.ParkingAreaDetailDto;
 import com.capstone.team5.pmmap.dto.ParkingAreaRequestDto;
+import com.capstone.team5.pmmap.dto.ParkingAreaResponseDto;
 import com.capstone.team5.pmmap.entity.BuildingEntity;
 import com.capstone.team5.pmmap.entity.ParkingAreaEntity;
 import com.capstone.team5.pmmap.repository.BuildingRepository;
 import com.capstone.team5.pmmap.repository.ParkingAreaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +38,24 @@ public class ParkingAreaService {
         }catch (Exception e) {
             throw e;
         }
+    }
+
+    public List<ParkingAreaResponseDto> findAllParkingAreas(){
+       try {
+           List<ParkingAreaEntity> parkingAreaEntities = parkingAreaRepository.selectAll();
+           List<ParkingAreaResponseDto> result = new ArrayList<>();
+           for (ParkingAreaEntity parkingAreaEntity : parkingAreaEntities) {
+               ParkingAreaResponseDto parkingAreaResponseDto = ParkingAreaResponseDto.builder()
+                       .parkingAreaId(parkingAreaEntity.getParkingAreaId())
+                       .name(parkingAreaEntity.getName())
+                       .latitude(parkingAreaEntity.getLatitude())
+                       .longitude(parkingAreaEntity.getLongitude())
+                       .build();
+               result.add(parkingAreaResponseDto);
+           }
+           return result;
+       }catch (Exception e){
+           throw e;
+       }
     }
 }
