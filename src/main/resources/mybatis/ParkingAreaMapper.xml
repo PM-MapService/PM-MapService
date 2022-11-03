@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.capstone.team5.repository.ParkingAreaRepository">
+    <insert id="insert"
+            parameterType="ParkingAreaEntity"
+            useGeneratedKeys="true"
+            keyProperty="parkingAreaId"
+            keyColumn="parking_area_id">
+        INSERT INTO parking_area (name, latitude, longitude, image, image_map, building_id)
+        VALUES (#{name}, #{latitude}, #{longitude}, #{image}, #{imageMap}, #{buildingId});
+    </insert>
+
+    <select id="select"
+            resultType="ParkingAreaEntity">
+        SELECT parking_area_id, name, latitude, longitude, image, image_map, building_id
+          FROM parking_area
+         WHERE parking_area_id = #{parkingAreaId}
+    </select>
+
+    <update id="update"
+            parameterType="ParkingAreaEntity"
+            useGeneratedKeys="true"
+            keyProperty="parkingAreaId"
+            keyColumn="parking_area_id">
+        UPDATE parking_area
+           SET name = #{name},
+               latitude = #{latitude},
+               longitude = #{longitude},
+               image = #{image},
+               image_map = #{imageMap},
+               building_id = #{buildingId}
+         WHERE parking_area_id = #{parkingAreaId};
+    </update>
+
+    <delete id="delete"
+            parameterType="int">
+        DELETE
+          FROM parking_area
+         WHERE parking_area_id = #{parkingAreaId}
+    </delete>
+
+    <select id="selectAll" resultType="ParkingAreaEntity">
+        SELECT parking_area_id, name, latitude, longitude, image, image_map, building_id
+          FROM parking_area
+    </select>
+
+    <select id="selectByBuilding" resultType="ParkingAreaEntity">
+        SELECT parking_area_id, name, latitude, longitude, image, image_map, building_id
+          FROM parking_area
+         WHERE building_id = #{buildingId}
+    </select>
+
+</mapper>

@@ -1,9 +1,11 @@
 server:
   port: 8085
 
+mybatis:
+  type-aliases-package: com.capstone.team5.entity #entity ??
+  mapper-locations: mybatis/Mapper.xml #??.xml ??
+
 spring:
   application:
     name: pm-map
-  mybatis:
-    type-aliases-package: com.capstone.team5.entity #entity ??
-    mapper-locations: mybatis/Mapper.xml #??.xml ??
+
