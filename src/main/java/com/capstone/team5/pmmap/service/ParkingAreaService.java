@@ -78,4 +78,27 @@ public class ParkingAreaService {
             throw e;
         }
     }
+
+    public List<ParkingAreaResponseDto> findParkingAreasByBuilding(String buildingName){
+        try{
+            BuildingEntity buildingEntity = buildingRepository.selectByName(buildingName);
+            int buildingId = buildingEntity.getBuildingId();
+
+            List<ParkingAreaEntity> parkingAreaEntities = parkingAreaRepository.selectByBuilding(buildingId);
+
+            List<ParkingAreaResponseDto> result = new ArrayList<>();
+            for (ParkingAreaEntity parkingAreaEntity : parkingAreaEntities) {
+                ParkingAreaResponseDto parkingAreaResponseDto = ParkingAreaResponseDto.builder()
+                        .parkingAreaId(parkingAreaEntity.getParkingAreaId())
+                        .name(parkingAreaEntity.getName())
+                        .latitude(parkingAreaEntity.getLatitude())
+                        .longitude(parkingAreaEntity.getLongitude())
+                        .build();
+                result.add(parkingAreaResponseDto);
+            }
+            return result;
+        }catch (Exception e){
+            throw e;
+        }
+    }
 }
