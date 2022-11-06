@@ -2,10 +2,16 @@ server:
   port: 8085
 
 mybatis:
-  type-aliases-package: com.capstone.team5.entity #entity ??
-  mapper-locations: mybatis/Mapper.xml #??.xml ??
+  type-aliases-package: com.capstone.team5.pmmap.entity #entity ??
+  mapper-locations: mybatis/**/*.xml #??.xml ??
 
 spring:
   application:
     name: pm-map
 
+    #postgreSQL
+  datasource:
+    url: jdbc:postgresql://welcome5-db.c7zdxujz2wc8.ap-northeast-2.rds.amazonaws.com:5432/postgresql #??DB?(rds??? localhost?? ?????? ????), ardiary_nf: no foreign ??? ?? ??? ??????. ??? ?? ????? _nf??? ?
+    driver-class-name: org.postgresql.Driver
+    username: admin5
+    password: jongsul5
