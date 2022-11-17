@@ -6,15 +6,13 @@ import com.capstone.team5.pmmap.dto.ParkingAreaRequestDto;
 import com.capstone.team5.pmmap.dto.ParkingAreaResponseDto;
 import com.capstone.team5.pmmap.service.ParkingAreaService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ParkingAreaController {
 
@@ -45,11 +43,12 @@ public class ParkingAreaController {
             ParkingAreaDetailDto parkingAreaDetailDto = parkingAreaService.findParkingArea(id);
             return ResponseEntity.status(HttpStatus.OK).body(parkingAreaDetailDto);
         }catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("오류 발생"));
         }
     }
 
-    @GetMapping("/api/parking-areas")
+    @GetMapping("/api/parking-areas/building")
     public ResponseEntity<?> searchParkingAreasByBuilding(@RequestParam String buildingName){
         try {
             List<ParkingAreaResponseDto> parkingAreasByBuilding = parkingAreaService.findParkingAreasByBuilding(buildingName);
