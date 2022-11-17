@@ -23,6 +23,7 @@ public class ParkingAreaController {
           parkingAreaService.createParkingArea(parkingAreaRequestDto);
           return ResponseEntity.status(HttpStatus.CREATED).body("주차구역 추가 성공");
       }catch (Exception e){
+          e.printStackTrace();
           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("오류 발생"));
       }
     }
@@ -33,6 +34,7 @@ public class ParkingAreaController {
            List<ParkingAreaResponseDto> allParkingAreas = parkingAreaService.findAllParkingAreas();
            return ResponseEntity.status(HttpStatus.OK).body(allParkingAreas);
        }catch (Exception e){
+           e.printStackTrace();
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("오류 발생"));
        }
     }
@@ -54,6 +56,7 @@ public class ParkingAreaController {
             List<ParkingAreaResponseDto> parkingAreasByBuilding = parkingAreaService.findParkingAreasByBuilding(buildingName);
             return ResponseEntity.status(HttpStatus.OK).body(parkingAreasByBuilding);
         }catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("오류 발생"));
         }
     }
