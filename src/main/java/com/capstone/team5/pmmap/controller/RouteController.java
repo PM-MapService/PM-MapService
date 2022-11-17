@@ -1,7 +1,9 @@
 package com.capstone.team5.pmmap.controller;
 
 import com.capstone.team5.pmmap.dto.ErrorResponse;
+import com.capstone.team5.pmmap.dto.NodeCoordinate;
 import com.capstone.team5.pmmap.dto.RouteRequestDto;
+import com.capstone.team5.pmmap.service.ParkingAreaService;
 import com.capstone.team5.pmmap.service.RouteService;
 import lombok.RequiredArgsConstructor;
 import okhttp3.Response;
@@ -19,11 +21,14 @@ import java.io.IOException;
 public class RouteController {
 
     private final RouteService routeService;
-
+    private final ParkingAreaService parkingAreaService;
     @GetMapping("/api/route")
-    public ResponseEntity<?> findRoute(){
+    public ResponseEntity<?> findRoute(double startLng, double startLat, int endId){
+        NodeCoordinate nodeCoordinate = parkingAreaService.getCoordinate(endId);
+        double endLat = nodeCoordinate.getLatitude();
+        double endLng = nodeCoordinate.getLongitude();
         try{
-            Response response = routeService.findRoute();
+            Response response = routeService.findRoute(startLng, startLat, endLng, endLat);
             return ResponseEntity.status(HttpStatus.OK).body(response.body().string());
         }catch (IOException e){
             e.printStackTrace();

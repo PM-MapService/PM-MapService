@@ -1,5 +1,6 @@
 package com.capstone.team5.pmmap.service;
 
+import com.capstone.team5.pmmap.dto.NodeCoordinate;
 import com.capstone.team5.pmmap.dto.ParkingAreaDetailDto;
 import com.capstone.team5.pmmap.dto.ParkingAreaRequestDto;
 import com.capstone.team5.pmmap.dto.ParkingAreaResponseDto;
@@ -19,6 +20,15 @@ public class ParkingAreaService {
 
     private final ParkingAreaRepository parkingAreaRepository;
     private final BuildingRepository buildingRepository;
+
+    public NodeCoordinate getCoordinate(int parkingAreaId){
+        ParkingAreaEntity parkingAreaEntity = parkingAreaRepository.select(parkingAreaId);
+        NodeCoordinate node = NodeCoordinate.builder()
+                .longitude(parkingAreaEntity.getLongitude())
+                .latitude(parkingAreaEntity.getLatitude())
+                .build();
+        return node;
+    }
 
     public void createParkingArea(ParkingAreaRequestDto parkingAreaRequestDto){
         try {

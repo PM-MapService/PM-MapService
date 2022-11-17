@@ -9,14 +9,14 @@ import java.io.IOException;
 
 @Service
 public class RouteService {
-    public Response findRoute() throws IOException {
+    public Response findRoute(double startLng, double startLat, double endLng, double endLat) throws IOException {
 
         String tmapAppKey = "l7xxcf8d3af1899b4f168f7a593671f0c749";
 
         OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create("{\"startX\":126.92365493654832,\"startY\":37.556770374096615,\"endX\":126.92432158129688,\"endY\":37.55279861528311,\"startName\":\"%EC%B6%9C%EB%B0%9C\",\"endName\":\"%EB%8F%84%EC%B0%A9\"}", mediaType);
+        RequestBody body = RequestBody.create("{\"startX\":"+startLng+",\"startY\":"+startLat+",\"endX\":"+endLng+",\"endY\":"+endLat+",\"startName\":\"출발지\",\"endName\":\"도착지\"}", mediaType);
         Request request = new Request.Builder()
                 .url("https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&callback=function")
                 .post(body)
