@@ -2,7 +2,6 @@ package com.capstone.team5.pmmap.controller;
 
 import com.capstone.team5.pmmap.dto.ErrorResponse;
 import com.capstone.team5.pmmap.dto.NodeCoordinate;
-import com.capstone.team5.pmmap.dto.RouteRequestDto;
 import com.capstone.team5.pmmap.service.ParkingAreaService;
 import com.capstone.team5.pmmap.service.RouteService;
 import lombok.RequiredArgsConstructor;
