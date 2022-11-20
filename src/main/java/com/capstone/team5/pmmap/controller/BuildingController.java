@@ -18,7 +18,7 @@ public class BuildingController {
 
     final BuildingService buildingService;
 
-    @GetMapping("/api/parking-areas/building")
+    @GetMapping("/api/building")
     public ResponseEntity<?> searchBuildingLatLonByname(@RequestParam String buildingName){
         try {
             NodeCoordinate buildingCoordinate = buildingService.getCoordinateByName(buildingName);
