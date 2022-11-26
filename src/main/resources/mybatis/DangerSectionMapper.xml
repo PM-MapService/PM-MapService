@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.capstone.team5.pmmap.repository.DangerSectionRepository">
+    <insert id="insert"
+            parameterType="DangerSectionEntity"
+            useGeneratedKeys="true"
+            keyProperty="dangerSectionId"
+            keyColumn="danger_section_id">
+        INSERT INTO danger_section (name, rode_type, s_latitude, s_longitude, f_latitude, f_longitude, alternative_id)
+        VALUES (#{name}, #{rodeType}, #{startLatitude}, #{startLongitude}, #{finishLatitude}, #{finishLongitude}, #{alternativeId});
+    </insert>
+
+    <select id="select"
+            resultType="DangerSectionEntity">
+        SELECT danger_section_id, name, rode_type, s_latitude, s_longitude, f_latitude, f_longitude, alternative_id
+          FROM danger_section
+         WHERE danger_section_id = #{dangerSectionId}
+    </select>
+
+    <select id="selectByName"
+            resultType="DangerSectionEntity">
+        SELECT danger_section_id, name, rode_type, s_latitude, s_longitude, f_latitude, f_longitude, alternative_id
+          FROM danger_section
+         WHERE name = #{name}
+    </select>
+    
+</mapper>
