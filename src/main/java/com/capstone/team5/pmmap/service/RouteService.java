@@ -52,7 +52,7 @@ public class RouteService {
 
                 if(lng1 == 126.6536066844918&& lat1 == 37.45006244351926&& lng2 == 126.65408719190675&& lat2 == 37.45021798947014){
                     change = true;
-                    index = i;
+                    index = i-2;
                 }
             }
         }
@@ -60,11 +60,11 @@ public class RouteService {
            return responseStr;
         }
         JSONArray changeFeatures = new JSONArray();
-        for(int i=0; i<index;i++) {
+        for(int i=0; i<=index;i++) {
             changeFeatures.put(features.get(i));
         }
 
-        JSONObject p = makePoint(126.6536066844918, 37.45006244351926,"매점 앞 좌회전", 12);
+        JSONObject p = makePoint(126.6536066844918, 37.45006244351926,"매점 앞 좌회전 후, 10m 이동", 12);
         changeFeatures.put(p);
         JSONObject l = makeLine(126.6536066844918,37.45006244351926, 126.65351502502821,37.45010410372546);
         changeFeatures.put(l);
@@ -78,7 +78,7 @@ public class RouteService {
         l = makeLine(126.65445934549194,37.45146785073327, 126.65661749626233,37.45095405965877);
         changeFeatures.put(l);
 
-        p = makePoint(126.65661749626233,37.45095405965877, "우회전 후 보행자도로를 따라 34m 이동", 13);
+        p = makePoint(126.65661749626233,37.45095405965877, "우회전 후 34m 이동", 13);
         changeFeatures.put(p);
         l = makeLine(126.65661749626233,37.45095405965877, 126.65672027222361,37.45068187089347);
         changeFeatures.put(l);
