@@ -64,18 +64,31 @@ public class RouteService {
             changeFeatures.put(features.get(i));
         }
 
-        JSONObject f = makePoint(126.6536066844918, 37.45006244351926,"매점 앞 좌회전", 12);
-        features.put(f);
-        f = makePoint(126.65351502502821,37.45010410372546, "우회전 후 173m 이동",13);
-        features.put(f);
-        f= makePoint(126.65445934549194,37.45146785073327, "쪽문에서 우회전 후 150m 이동", 13);
-        features.put(f);
-        f= makePoint(126.65661749626233,37.45095405965877, "우회전 후 보행자도로를 따라 34m 이동", 13);
-        features.put(f);
-        f= makePoint(126.65672027222361,37.45068187089347, "도착", 201);
-        features.put(f);
+        JSONObject p = makePoint(126.6536066844918, 37.45006244351926,"매점 앞 좌회전", 12);
+        changeFeatures.put(p);
+        JSONObject l = makeLine(126.6536066844918,37.45006244351926, 126.65351502502821,37.45010410372546);
+        changeFeatures.put(l);
+        p = makePoint(126.65351502502821,37.45010410372546, "우회전 후 173m 이동",13);
+        changeFeatures.put(p);
+        l = makeLine(126.65351502502821,37.45010410372546, 126.65445934549194,37.45146785073327);
+        changeFeatures.put(l);
 
-        return responseStr;
+        p = makePoint(126.65445934549194,37.45146785073327, "쪽문에서 우회전 후 150m 이동", 13);
+        changeFeatures.put(p);
+        l = makeLine(126.65445934549194,37.45146785073327, 126.65661749626233,37.45095405965877);
+        changeFeatures.put(l);
+
+        p = makePoint(126.65661749626233,37.45095405965877, "우회전 후 보행자도로를 따라 34m 이동", 13);
+        changeFeatures.put(p);
+        l = makeLine(126.65661749626233,37.45095405965877, 126.65672027222361,37.45068187089347);
+        changeFeatures.put(l);
+
+        p= makePoint(126.65672027222361,37.45068187089347, "도착", 201);
+        changeFeatures.put(p);
+
+        changed.put("features", changeFeatures);
+
+        return changed.toString();
     }
 
     public JSONObject makePoint(double lng, double lat, String desc, int turnType) throws JSONException {
@@ -99,7 +112,7 @@ public class RouteService {
         return feature;
     }
 
-    public JSONObject makeLine(float lng, float lat, float endLng, float endLat) throws JSONException {
+    public JSONObject makeLine(double lng, double lat, double endLng, double endLat) throws JSONException {
         JSONArray coordinates = new JSONArray();
         JSONArray start = new JSONArray();
         start.put(lng);
