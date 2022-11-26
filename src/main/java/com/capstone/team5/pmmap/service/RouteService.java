@@ -85,7 +85,11 @@ public class RouteService {
 
         p= makePoint(126.65672027222361,37.45068187089347, "도착", 201);
         changeFeatures.put(p);
+        int dist=calDistanceFromFeatures(changeFeatures);
 
+        JSONObject firstPoint= (JSONObject) changeFeatures.get(0);
+        JSONObject firstProperties= (JSONObject) firstPoint.getJSONObject("properties");
+        firstProperties.put("totalDistance",dist);
         changed.put("features", changeFeatures);
 
         return changed.toString();
@@ -140,4 +144,47 @@ public class RouteService {
 
         return feature;
     }
+
+    public int calDistanceFromFeatures(JSONArray features) throws JSONException {
+        double distance=0;
+        double curlon,curlat;
+        double prelon =0,prelat = 0;
+        int cnt=0;
+        for(int i = 0; i < features.length(); i++){
+            JSONObject data=(JSONObject) features.get(i);
+            JSONObject geometry=data.getJSONObject("geometry");
+            if(geometry.getString("type").equals("Point")){
+                if(cnt==0) {
+                    JSONArray coord= (JSONArray) geometry.get("coordinates");
+                    prelon=coord.getDouble(1);
+                    prelat=coord.getDouble(0);}
+                else{
+                    JSONArray coord= (JSONArray) geometry.get("coordinates");
+                    curlon=coord.getDouble(1);
+                    curlat=coord.getDouble(0);
+                    distance+=calDistance(curlat,curlon,prelat,prelon);
+                    prelat=curlat;
+                    prelon=curlon;
+                }
+                cnt++;
+            }
+        }
+        return (int)distance;
+    }
+    public double calDistance(double lat0, double lon0,double lat, double lon) {
+        double theta = lon0 - lon;
+        double dist = Math.sin(deg2rad(lat0)) * Math.sin(deg2rad(lat)) + Math.cos(deg2rad(lat0)) * Math.cos(deg2rad(lat)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        dist = dist * 1609.344;
+        return dist;
+    }
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
+
 }
