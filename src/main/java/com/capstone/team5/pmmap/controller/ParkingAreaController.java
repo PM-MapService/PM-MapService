@@ -50,6 +50,7 @@ public class ParkingAreaController {
         }
     }
 
+    
     @GetMapping("/api/parking-areas/building")
     public ResponseEntity<?> searchParkingAreasByBuilding(@RequestParam String buildingName){
         try {
