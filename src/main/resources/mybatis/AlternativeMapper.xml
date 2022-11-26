@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.capstone.team5.pmmap.repository.AlternativeRepository">
+    <insert id="insert"
+            parameterType="AlternativeEntity"
+            useGeneratedKeys="true"
+            keyProperty="alternativeId"
+            keyColumn="alternative_id">
+        INSERT INTO alternative (name, nodes)
+        VALUES (#{name}, #{nodes});
+    </insert>
+
+    <select id="select"
+            resultType="AlternativeEntity">
+        SELECT alternative_id, name, nodes
+          FROM alternative
+         WHERE alternative_id = #{alternativeId}
+    </select>
+
+    <select id="selectByName"
+            resultType="AlternativeEntity">
+        SELECT alternative_id, name, nodes
+          FROM alternative
+         WHERE name = #{name}
+    </select>
+
+</mapper>
