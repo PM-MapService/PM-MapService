@@ -52,7 +52,7 @@ public class RouteService {
 
                 if(lng1 == 126.6536066844918&& lat1 == 37.45006244351926&& lng2 == 126.65408719190675&& lat2 == 37.45021798947014){
                     change = true;
-                    index = i;
+                    index = i-2;
                 }
             }
         }
@@ -60,7 +60,7 @@ public class RouteService {
            return responseStr;
         }
         JSONArray changeFeatures = new JSONArray();
-        for(int i=0; i<index;i++) {
+        for(int i=0; i<=index;i++) {
             changeFeatures.put(features.get(i));
         }
 
