@@ -9,4 +9,5 @@ public interface DangerSectionRepository {
     int insert(DangerSectionEntity dangerSectionEntity);
     DangerSectionEntity select(int dangerSectionId);
     DangerSectionEntity selectByName(String dangerSectionName);
+    DangerSectionEntity update(DangerSectionEntity dangerSectionEntity);
 }

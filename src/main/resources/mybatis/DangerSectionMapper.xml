@@ -25,4 +25,20 @@
          WHERE name = #{name}
     </select>
 
+    <update id="update"
+            parameterType="DangerSectionEntity"
+            useGeneratedKeys="true"
+            keyProperty="dangerSectionId"
+            keyColumn="danger_section_id">
+        UPDATE danger_section
+           SET name = #{name},
+               rode_type = #{rodeType},
+               s_latitude = #{startLatitude},
+               s_longitude = #{startLongitude},
+               f_latitude = #{finishLatitude},
+               f_longitude = #{finishLongitude},
+               alternative_id = #{alternativeId}
+        WHERE danger_section_id = #{dangerSectionId};
+    </update>
+
 </mapper>
