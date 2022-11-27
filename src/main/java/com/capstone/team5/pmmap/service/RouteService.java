@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -83,18 +84,18 @@ public class RouteService {
             changeFeatures.put(features.get(i));
         }
         int alternativeId = danger.getAlternativeId();
-        //AlternativeEntity alternativeEntity = alternativeRepository.select(alternativeId);
-        //List<Integer> alternativeNodes = alternativeEntity.getNodes();
-        List<Integer> alternativeNodes = Arrays.asList(8, 9, 10, 11, 12);
-        for(int i=0; i<alternativeNodes.size(); i++){
-            int nodeId = alternativeNodes.get(i);
+        AlternativeEntity alternativeEntity = alternativeRepository.select(alternativeId);
+        int[] alternativeNodes = alternativeEntity.getNodes();
+        //List<Integer> alternativeNodes = Arrays.asList(8, 9, 10, 11, 12);
+        for(int i=0; i<alternativeNodes.length; i++){
+            int nodeId = alternativeNodes[i];
             NodeEntity node = nodeRepository.select(nodeId);
             System.out.println(nodeId);
             JSONObject p = makePoint(node.getLongitude(), node.getLatitude(), node.getDescription(), node.getTurnType());
             changeFeatures.put(p);
 
-            if(i!=alternativeNodes.size()-1){
-                int nextId = alternativeNodes.get(i+1);
+            if(i!=alternativeNodes.length-1){
+                int nextId = alternativeNodes[i+1];
                 NodeEntity next = nodeRepository.select(nextId);
                 JSONObject l = makeLine(node.getLongitude(), node.getLatitude(), next.getLongitude(), next.getLatitude());
                 changeFeatures.put(l);
