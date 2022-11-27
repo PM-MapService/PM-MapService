@@ -24,6 +24,15 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	runtimeOnly 'org.postgresql:postgresql'
+	// https://mvnrepository.com/artifact/org.postgresql/postgresql
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.0'
+	//mybatis
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	//okhttp
+	implementation("com.squareup.okhttp3:okhttp:4.9.1")
+	//json
+	implementation group: 'org.json', name: 'json', version: '20090211'
 }
 
 tasks.named('test') {

@@ -1,12 +1,12 @@
 package com.capstone.team5.pmmap.dto;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class ParkingAreaDetailDto {
+public class ParkingAreaRequestDto {
     String name;
+    double latitude;
+    double longitude;
     String image;
     String imageMap;
     String buildingName;

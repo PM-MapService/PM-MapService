@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ParkingAreaDetailDto {
+public class ParkingAreaResponseDto {
+    int parkingAreaId;
     String name;
-    String image;
-    String imageMap;
-    String buildingName;
+    double latitude;
+    double longitude;
 }
