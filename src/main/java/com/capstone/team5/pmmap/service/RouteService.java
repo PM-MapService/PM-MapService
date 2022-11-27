@@ -112,6 +112,74 @@ public class RouteService {
         return changed.toString();
     }
 
+    public String changeStartRoute (String responseStr) throws JSONException {
+
+        JSONObject changed = new JSONObject();
+        JSONObject original = new JSONObject(responseStr);
+        JSONArray features = original.getJSONArray("features");
+        int index=0;
+        boolean change = false;
+
+        DangerSectionEntity danger = dangerSectionRepository.selectByName("경사_하텍");
+        for(int i=0; i<features.length(); i++){
+            JSONObject feature = features.getJSONObject(i);
+            JSONObject geometry = feature.getJSONObject("geometry");
+            if(geometry.getString("type").equals("Point")){
+                JSONArray coordinates = geometry.getJSONArray("coordinates");
+                Double startLng  = coordinates.getDouble(0);
+                Double startLat = coordinates.getDouble(1);
+                if(startLng == danger.getStartLongitude() && startLat == danger.getStartLatitude()){
+                    int endIndex = i+2;
+                    feature = features.getJSONObject(endIndex);
+                    geometry = feature.getJSONObject("geometry");
+                    coordinates = geometry.getJSONArray("coordinates");
+                    Double endLng = coordinates.getDouble(0);
+                    Double endLat = coordinates.getDouble(1);
+                    if(geometry.getString("type").equals("Point")&&endLng==danger.getFinishLongitude()&&endLat==danger.getFinishLatitude()){
+                        index = endIndex;
+                        change = true;
+                    }
+                }
+            }
+        }
+        if(!change){
+            return responseStr;
+        }
+        JSONArray changeFeatures = new JSONArray();
+        //1p-> 1l-> 2p-> 2l -> 3p-> 3l-> 4p.
+        //int alternativeId = danger.getAlternativeId();
+        //AlternativeEntity alternativeEntity = alternativeRepository.select(alternativeId);
+        //int[] alternativeNodes = alternativeEntity.getNodes();
+        int[] alternativeNodes = {13, 14, 15, 16};
+        //List<Integer> alternativeNodes = Arrays.asList(13, 14, 15, 16);
+        for(int i=0; i<alternativeNodes.length; i++){
+            int nodeId = alternativeNodes[i];
+            NodeEntity node = nodeRepository.select(nodeId);
+            System.out.println(nodeId);
+            JSONObject p = makePoint(node.getLongitude(), node.getLatitude(), node.getDescription(), node.getTurnType());
+            changeFeatures.put(p);
+
+            if(i!=alternativeNodes.length-1){
+                int nextId = alternativeNodes[i+1];
+                NodeEntity next = nodeRepository.select(nextId);
+                JSONObject l = makeLine(node.getLongitude(), node.getLatitude(), next.getLongitude(), next.getLatitude());
+                changeFeatures.put(l);
+            }
+        }
+        for(int i=index+1; i<features.length();i++) {
+            changeFeatures.put(features.get(i));
+        }
+
+        int dist=calDistanceFromFeatures(changeFeatures);
+
+        JSONObject firstPoint= (JSONObject) changeFeatures.get(0);
+        JSONObject firstProperties= (JSONObject) firstPoint.getJSONObject("properties");
+        firstProperties.put("totalDistance",dist);
+        changed.put("features", changeFeatures);
+
+        return changed.toString();
+    }
+
     public JSONObject makePoint(double lng, double lat, String desc, int turnType) throws JSONException {
         JSONArray coordinate = new JSONArray();
 

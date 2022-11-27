@@ -29,7 +29,13 @@ public class RouteController {
         double endLng = nodeCoordinate.getLongitude();
         try{
             Response response = routeService.findRoute(startLng, startLat, endLng, endLat);
-            String finalRoute = routeService.changeRoute(response.body().string());
+            String responseStr = response.body().string();
+            String finalRoute;
+            if(endId==8) {
+                finalRoute = routeService.changeStartRoute(responseStr);
+            }else{
+            finalRoute = routeService.changeRoute(responseStr);
+            }
             return ResponseEntity.status(HttpStatus.OK).body(finalRoute);
         }catch (IOException e){
             e.printStackTrace();
