@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.capstone.team5.pmmap.repository.AlternativeRepository">
+
+    <select id="select"
+            resultType="AlternativeEntity">
+        SELECT *
+          FROM alternative
+         WHERE alternative_id = #{alternativeId}
+    </select>
+
+    <select id="selectByName"
+            resultType="AlternativeEntity">
+        SELECT *
+          FROM alternative
+         WHERE name = #{name}
+    </select>
+
+</mapper>

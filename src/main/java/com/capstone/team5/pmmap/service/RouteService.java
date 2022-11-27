@@ -1,5 +1,12 @@
 package com.capstone.team5.pmmap.service;
 
+import com.capstone.team5.pmmap.entity.AlternativeEntity;
+import com.capstone.team5.pmmap.entity.DangerSectionEntity;
+import com.capstone.team5.pmmap.entity.NodeEntity;
+import com.capstone.team5.pmmap.repository.AlternativeRepository;
+import com.capstone.team5.pmmap.repository.DangerSectionRepository;
+import com.capstone.team5.pmmap.repository.NodeRepository;
+import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,10 +14,15 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RouteService {
+
+    private final DangerSectionRepository dangerSectionRepository;
+    private final AlternativeRepository alternativeRepository;
+    private final NodeRepository nodeRepository;
+
     public Response findRoute(double startLng, double startLat, double endLng, double endLat) throws IOException {
 
         String tmapAppKey = "l7xxcf8d3af1899b4f168f7a593671f0c749";
@@ -38,6 +50,8 @@ public class RouteService {
         JSONArray features = original.getJSONArray("features");
         int index=0;
         boolean change = false;
+
+        DangerSectionEntity danger = dangerSectionRepository.selectByName("경사_매점뒤");
         for(int i=0; i<features.length(); i++){
             JSONObject feature = features.getJSONObject(i);
             JSONObject geometry = feature.getJSONObject("geometry");
@@ -50,7 +64,9 @@ public class RouteService {
                 Double lng2 = coordinate2.getDouble(0);
                 Double lat2 = coordinate2.getDouble(1);
 
-                if(lng1 == 126.6536066844918&& lat1 == 37.45006244351926&& lng2 == 126.65408719190675&& lat2 == 37.45021798947014){
+                //lng1 == 126.6536066844918&& lat1 == 37.45006244351926&& lng2 == 126.65408719190675&& lat2 == 37.45021798947014
+
+                if(lng1 == danger.getStartLongitude()&& lat1 == danger.getStartLatitude()&& lng2 == danger.getFinishLongitude() && lat2 == danger.getFinishLatitude()){
                     change = true;
                     index = i-2;
                 }
@@ -63,28 +79,93 @@ public class RouteService {
         for(int i=0; i<=index;i++) {
             changeFeatures.put(features.get(i));
         }
+        int alternativeId = danger.getAlternativeId();
+        AlternativeEntity alternativeEntity = alternativeRepository.select(alternativeId);
+        int[] alternativeNodes = alternativeEntity.getNodes();
+        //List<Integer> alternativeNodes = Arrays.asList(8, 9, 10, 11, 12);
+        for(int i=0; i<alternativeNodes.length; i++){
+            int nodeId = alternativeNodes[i];
+            NodeEntity node = nodeRepository.select(nodeId);
+            System.out.println(nodeId);
+            JSONObject p = makePoint(node.getLongitude(), node.getLatitude(), node.getDescription(), node.getTurnType());
+            changeFeatures.put(p);
 
-        JSONObject p = makePoint(126.6536066844918, 37.45006244351926,"매점 앞 좌회전 후, 10m 이동", 12);
-        changeFeatures.put(p);
-        JSONObject l = makeLine(126.6536066844918,37.45006244351926, 126.65351502502821,37.45010410372546);
-        changeFeatures.put(l);
-        p = makePoint(126.65351502502821,37.45010410372546, "우회전 후 173m 이동",13);
-        changeFeatures.put(p);
-        l = makeLine(126.65351502502821,37.45010410372546, 126.65445934549194,37.45146785073327);
-        changeFeatures.put(l);
+            if(i!=alternativeNodes.length-1){
+                int nextId = alternativeNodes[i+1];
+                NodeEntity next = nodeRepository.select(nextId);
+                JSONObject l = makeLine(node.getLongitude(), node.getLatitude(), next.getLongitude(), next.getLatitude());
+                changeFeatures.put(l);
+            }
 
-        p = makePoint(126.65445934549194,37.45146785073327, "쪽문에서 우회전 후 150m 이동", 13);
-        changeFeatures.put(p);
-        l = makeLine(126.65445934549194,37.45146785073327, 126.65661749626233,37.45095405965877);
-        changeFeatures.put(l);
+        }
+        int dist=calDistanceFromFeatures(changeFeatures);
 
-        p = makePoint(126.65661749626233,37.45095405965877, "우회전 후 34m 이동", 13);
-        changeFeatures.put(p);
-        l = makeLine(126.65661749626233,37.45095405965877, 126.65672027222361,37.45068187089347);
-        changeFeatures.put(l);
+        JSONObject firstPoint= (JSONObject) changeFeatures.get(0);
+        JSONObject firstProperties= (JSONObject) firstPoint.getJSONObject("properties");
+        firstProperties.put("totalDistance",dist);
+        changed.put("features", changeFeatures);
 
-        p= makePoint(126.65672027222361,37.45068187089347, "도착", 201);
-        changeFeatures.put(p);
+        return changed.toString();
+    }
+
+    public String changeStartRoute (String responseStr) throws JSONException {
+
+        JSONObject changed = new JSONObject();
+        JSONObject original = new JSONObject(responseStr);
+        JSONArray features = original.getJSONArray("features");
+        int index=0;
+        boolean change = false;
+
+        DangerSectionEntity danger = dangerSectionRepository.selectByName("경사_하텍");
+        for(int i=0; i<features.length(); i++){
+            JSONObject feature = features.getJSONObject(i);
+            JSONObject geometry = feature.getJSONObject("geometry");
+            if(geometry.getString("type").equals("Point")){
+                JSONArray coordinates = geometry.getJSONArray("coordinates");
+                Double startLng  = coordinates.getDouble(0);
+                Double startLat = coordinates.getDouble(1);
+                if(startLng == danger.getStartLongitude() && startLat == danger.getStartLatitude()){
+                    int endIndex = i+2;
+                    feature = features.getJSONObject(endIndex);
+                    geometry = feature.getJSONObject("geometry");
+                    coordinates = geometry.getJSONArray("coordinates");
+                    Double endLng = coordinates.getDouble(0);
+                    Double endLat = coordinates.getDouble(1);
+                    if(geometry.getString("type").equals("Point")&&endLng==danger.getFinishLongitude()&&endLat==danger.getFinishLatitude()){
+                        index = endIndex;
+                        change = true;
+                    }
+                }
+            }
+        }
+        if(!change){
+            return responseStr;
+        }
+        JSONArray changeFeatures = new JSONArray();
+        //1p-> 1l-> 2p-> 2l -> 3p-> 3l-> 4p.
+        //int alternativeId = danger.getAlternativeId();
+        //AlternativeEntity alternativeEntity = alternativeRepository.select(alternativeId);
+        //int[] alternativeNodes = alternativeEntity.getNodes();
+        int[] alternativeNodes = {13, 14, 15, 16};
+        //List<Integer> alternativeNodes = Arrays.asList(13, 14, 15, 16);
+        for(int i=0; i<alternativeNodes.length; i++){
+            int nodeId = alternativeNodes[i];
+            NodeEntity node = nodeRepository.select(nodeId);
+            System.out.println(nodeId);
+            JSONObject p = makePoint(node.getLongitude(), node.getLatitude(), node.getDescription(), node.getTurnType());
+            changeFeatures.put(p);
+
+            if(i!=alternativeNodes.length-1){
+                int nextId = alternativeNodes[i+1];
+                NodeEntity next = nodeRepository.select(nextId);
+                JSONObject l = makeLine(node.getLongitude(), node.getLatitude(), next.getLongitude(), next.getLatitude());
+                changeFeatures.put(l);
+            }
+        }
+        for(int i=index+1; i<features.length();i++) {
+            changeFeatures.put(features.get(i));
+        }
+
         int dist=calDistanceFromFeatures(changeFeatures);
 
         JSONObject firstPoint= (JSONObject) changeFeatures.get(0);

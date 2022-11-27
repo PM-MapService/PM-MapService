@@ -3,6 +3,8 @@ package com.capstone.team5.pmmap.entity;
 import lombok.Builder;
 import lombok.Data;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -10,5 +12,5 @@ import java.util.List;
 public class AlternativeEntity {
     private int alternativeId;
     private String name;
-    private List<Integer> nodes;
+    private int[] nodes;
 }

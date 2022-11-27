@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.capstone.team5.pmmap.repository.NodeRepository">
+    <insert id="insert"
+            parameterType="NodeEntity"
+            useGeneratedKeys="true"
+            keyProperty="nodeId"
+            keyColumn="node_id">
+        INSERT INTO point (name, latitude, longitude, description, turn_type)
+        VALUES (#{name}, #{latitude}, #{longitude}, #{description}, #{turnType});
+    </insert>
+
+    <select id="select"
+            resultType="NodeEntity">
+        SELECT point_id, name, latitude, longitude, description, turn_type
+          FROM point
+         WHERE point_id = #{nodeId}
+    </select>
+
+    <select id="selectByName"
+            resultType="NodeEntity">
+        SELECT point_id, name, latitude, longitude, description, turn_type
+          FROM point
+         WHERE name = #{name}
+    </select>
+</mapper>

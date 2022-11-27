@@ -2,7 +2,6 @@ package com.capstone.team5.pmmap.controller;
 
 import com.capstone.team5.pmmap.dto.ErrorResponse;
 import com.capstone.team5.pmmap.dto.NodeCoordinate;
-import com.capstone.team5.pmmap.dto.ParkingAreaResponseDto;
 import com.capstone.team5.pmmap.service.BuildingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class BuildingController {
@@ -19,7 +17,7 @@ public class BuildingController {
     final BuildingService buildingService;
 
     @GetMapping("/api/building")
-    public ResponseEntity<?> searchBuildingLatLonByname(@RequestParam String buildingName){
+    public ResponseEntity<?> searchBuildingLatLonByName(@RequestParam String buildingName){
         try {
             NodeCoordinate buildingCoordinate = buildingService.getCoordinateByName(buildingName);
             return ResponseEntity.status(HttpStatus.OK).body(buildingCoordinate);
