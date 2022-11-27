@@ -7,20 +7,20 @@
             useGeneratedKeys="true"
             keyProperty="dangerSectionId"
             keyColumn="danger_section_id">
-        INSERT INTO danger_section (name, rode_type, s_latitude, s_longitude, f_latitude, f_longitude, alternative_id)
-        VALUES (#{name}, #{rodeType}, #{startLatitude}, #{startLongitude}, #{finishLatitude}, #{finishLongitude}, #{alternativeId});
+        INSERT INTO danger_section (name, road_type, s_latitude, s_longitude, f_latitude, f_longitude, alternative_id)
+        VALUES (#{name}, #{roadType}, #{startLatitude}, #{startLongitude}, #{finishLatitude}, #{finishLongitude}, #{alternativeId});
     </insert>
 
     <select id="select"
             resultType="DangerSectionEntity">
-        SELECT danger_section_id, name, rode_type, s_latitude, s_longitude, f_latitude, f_longitude, alternative_id
+        SELECT danger_section_id, name, road_type, s_latitude, s_longitude, f_latitude, f_longitude, alternative_id
           FROM danger_section
          WHERE danger_section_id = #{dangerSectionId}
     </select>
 
     <select id="selectByName"
             resultType="DangerSectionEntity">
-        SELECT danger_section_id, name, rode_type, s_latitude, s_longitude, f_latitude, f_longitude, alternative_id
+        SELECT danger_section_id, name, road_type, s_latitude, s_longitude, f_latitude, f_longitude, alternative_id
           FROM danger_section
          WHERE name = #{name}
     </select>
@@ -32,7 +32,7 @@
             keyColumn="danger_section_id">
         UPDATE danger_section
            SET name = #{name},
-               rode_type = #{rodeType},
+               road_type = #{roadType},
                s_latitude = #{startLatitude},
                s_longitude = #{startLongitude},
                f_latitude = #{finishLatitude},

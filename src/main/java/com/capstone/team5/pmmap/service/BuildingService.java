@@ -2,7 +2,6 @@ package com.capstone.team5.pmmap.service;
 
 import com.capstone.team5.pmmap.dto.NodeCoordinate;
 import com.capstone.team5.pmmap.entity.BuildingEntity;
-import com.capstone.team5.pmmap.entity.ParkingAreaEntity;
 import com.capstone.team5.pmmap.repository.BuildingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

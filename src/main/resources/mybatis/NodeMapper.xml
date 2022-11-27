@@ -7,21 +7,21 @@
             useGeneratedKeys="true"
             keyProperty="nodeId"
             keyColumn="node_id">
-        INSERT INTO node (name, latitude, longitude)
-        VALUES (#{name}, #{latitude}, #{longitude});
+        INSERT INTO point (name, latitude, longitude, description, turn_type)
+        VALUES (#{name}, #{latitude}, #{longitude}, #{description}, #{turnType});
     </insert>
 
     <select id="select"
             resultType="NodeEntity">
-        SELECT node_id, name, latitude, longitude
-          FROM node
-         WHERE node_id = #{nodeId}
+        SELECT point_id, name, latitude, longitude, description, turn_type
+          FROM point
+         WHERE point_id = #{nodeId}
     </select>
 
     <select id="selectByName"
             resultType="NodeEntity">
-        SELECT building_id, name, latitude, longitude
-          FROM node
+        SELECT point_id, name, latitude, longitude, description, turn_type
+          FROM point
          WHERE name = #{name}
     </select>
 </mapper>

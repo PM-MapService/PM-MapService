@@ -8,5 +8,5 @@ public interface AlternativeRepository {
 
     int insert(AlternativeEntity alternativeEntity);
     AlternativeEntity select(int alternativeId);
-    AlternativeEntity selectByName(String alternativeName);
+    AlternativeEntity selectByName(String name);
 }
